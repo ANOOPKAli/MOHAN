@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Anoop Marskole Job Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f5f5;}
+    header { background:#007BFF; color:#fff; padding:20px; text-align:center; }
+    nav { background:#0056b3; padding:10px; }
+    nav a { color:#fff; margin:0 15px; text-decoration:none; font-weight:bold; }
+    nav a:hover { text-decoration:underline; }
+    main { padding:20px; max-width:1000px; margin: auto; background:#fff; min-height:600px;}
+    footer { background:#007BFF; color:#fff; text-align:center; padding:15px; margin-top:20px;}
+    .job { border-bottom:1px solid #ddd; padding:10px 0; }
+    .job-title { font-weight:bold; color:#007BFF; font-size:18px; }
+    .pagination { margin-top:20px; text-align:center; }
+    .pagination button { margin:0 5px; padding:8px 15px; background:#007BFF; color:#fff; border:none; border-radius:5px; cursor:pointer; }
+    .pagination button:disabled { background:#ccc; cursor:not-allowed; }
+    #searchBox { width: 300px; padding: 8px; margin-bottom: 15px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Anoop Marskole Job Portal</h1>
+  <p>Your gateway to thousands of job opportunities!</p>
+</header>
+
+<nav>
+  <a href="#home" onclick="showPage('home')">Home</a>
+  <a href="#about" onclick="showPage('about')">About</a>
+  <a href="#services" onclick="showPage('services')">Services</a>
+  <a href="#gallery" onclick="showPage('gallery')">Gallery</a>
+  <a href="#blog" onclick="showPage('blog')">Blog</a>
+  <a href="#contact" onclick="showPage('contact')">Contact</a>
+  <a href="#login" onclick="showPage('login')">Login</a>
+  <a href="#products" onclick="showPage('products')">Products</a>
+</nav>
+
+<main>
+  <section id="home" class="page">
+    <h2>Job Listings</h2>
+    <input type="text" id="searchBox" placeholder="Search jobs by title or company..." oninput="searchJobs()" />
+    <div id="jobList"></div>
+    <div class="pagination">
+      <button id="prevBtn" onclick="prevPage()" disabled>Previous</button>
+      <button id="nextBtn" onclick="nextPage()">Next</button>
+    </div>
+  </section>
+
+  <section id="about" class="page" style="display:none;">
+    <h2>About Us</h2>
+    <p>Anoop Marskole Job Portal is dedicated to connecting job seekers with employers across India.</p>
+  </section>
+
+  <section id="services" class="page" style="display:none;">
+    <h2>Services</h2>
+    <ul>
+      <li>Job Listings</li>
+      <li>Resume Building</li>
+      <li>Career Counseling</li>
+      <li>Online Courses</li>
+    </ul>
+  </section>
+
+  <section id="gallery" class="page" style="display:none;">
+    <h2>Gallery</h2>
+    <img src="https://via.placeholder.com/150" alt="Image1" />
+    <img src="https://via.placeholder.com/150" alt="Image2" />
+    <img src="https://via.placeholder.com/150" alt="Image3" />
+  </section>
+
+  <section id="blog" class="page" style="display:none;">
+    <h2>Blog</h2>
+    <article>
+      <h3>How to Prepare for Interviews</h3>
+      <p>Interview preparation tips and tricks.</p>
+    </article>
+    <article>
+      <h3>Top 10 Skills in Demand</h3>
+      <p>Learn about the hottest skills in the job market.</p>
+    </article>
+  </section>
+
+  <section id="contact" class="page" style="display:none;">
+    <h2>Contact Us</h2>
+    <form id="contactForm" onsubmit="return submitForm(event)">
+      <label>Name:</label><br />
+      <input type="text" id="name" required /><br />
+      <label>Email:</label><br />
+      <input type="email" id="email" required /><br />
+      <label>Message:</label><br />
+      <textarea id="message" required></textarea><br />
+      <button type="submit">Send</button>
+    </form>
+    <p id="formMsg"></p>
+    <br />
+    <a href="https://wa.me/1234567890" target="_blank" style="color:#007BFF; font-weight:bold;">Chat with us on WhatsApp</a>
+  </section>
+
+  <section id="login" class="page" style="display:none;">
+    <h2>Login</h2>
+    <form onsubmit="return login(event)">
+      <label>Username:</label><br />
+      <input type="text" id="username" required /><br />
+      <label>Password:</label><br />
+      <input type="password" id="password" required /><br />
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginMsg"></p>
+  </section>
+
+  <section id="products" class="page" style="display:none;">
+    <h2>Products</h2>
+    <div>
+      <h3>Premium Resume Builder</h3>
+      <p>Price: ₹499</p>
+      <button onclick="alert('Payment gateway coming soon!')">Buy Now</button>
+    </div>
+    <div>
+      <h3>Interview Preparation Course</h3>
+      <p>Price: ₹999</p>
+      <button onclick="alert('Payment gateway coming soon!')">Buy Now</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2025 Anoop Marskole Job Portal. All rights reserved.</p>
+</footer>
+
+<script>
+  // Navigation function
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
+  }
+
+  // Sample data generation for 10000 jobs
+  const jobs = [];
+  for(let i=1; i<=10000; i++) {
+    jobs.push({
+      title: 'Job Title ' + i,
+      company: 'Company ' + ((i % 500) + 1),
+      location: ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad'][i % 5],
+      description: 'This is the description for job number ' + i
+    });
+  }
+
+  let currentPage = 1;
+  const jobsPerPage = 20;
+  let filteredJobs = jobs;
+
+  const jobListDiv = document.getElementById('jobList');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function renderJobs() {
+    jobListDiv.innerHTML = '';
+    const start = (currentPage - 1) * jobsPerPage;
+    const end = start + jobsPerPage;
+    const pageJobs = filteredJobs.slice(start, end);
+
+    if(pageJobs.length === 0) {
+      jobListDiv.innerHTML = '<p>No jobs found.</p>';
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      return;
+    }
+
+    pageJobs.forEach(job => {
+      const div = document.createElement('div');
+      div.className = 'job';
+      div.innerHTML = `<div class="job-title">${job.title}</div>
+                      <div>${job.company} - ${job.location}</div>
+                      <div>${job.description}</div>`;
+      jobListDiv.appendChild(div);
+    });
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = end >= filteredJobs.length;
+  }
+
+  function prevPage() {
+    if(currentPage > 1) {
+      currentPage--;
+      renderJobs();
+    }
+  }
+
+  function nextPage() {
+    if((currentPage * jobsPerPage) < filteredJobs.length) {
+      currentPage++;
+      renderJobs();
+    }
+  }
+
+  function searchJobs() {
+    const query = document.getElementById('searchBox').value.toLowerCase();
+    filteredJobs = jobs.filter(job =>
+      job.title.toLowerCase().includes(query) ||
+      job.company.toLowerCase().includes(query)
+    );
+    currentPage = 1;
+    renderJobs();
+  }
+
+  renderJobs();
+
+  // Contact form submission (simple simulation)
+  function submitForm(event) {
+    event.preventDefault();
+    document.getElementById('formMsg').textContent = 'Thank you for contacting us, ' + document.getElementById('name').value + '!';
+    document.getElementById('contactForm').reset();
+    return false;
+  }
+
+  // Basic login simulation
+  function login(event) {
+    event.preventDefault();
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    if(user === 'admin' && pass === 'password') {
+      document.getElementById('loginMsg').textContent = 'Login successful!';
+    } else {
+      document.getElementById('loginMsg').textContent = 'Invalid username or password.';
+    }
+    return false;
+  }
+</script>
+
+</body>
+</html>
